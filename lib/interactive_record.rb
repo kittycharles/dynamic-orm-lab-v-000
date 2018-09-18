@@ -56,7 +56,11 @@ class InteractiveRecord
   end
 
   def self.find_by(x)
-    sql = "SELECT * FROM #{self.table_name} WHERE ? = ?"
+    sql = <<-SQL
+    SELECT *
+    FROM #{self.table_name}
+    WHERE #{attribute.keys.to_s.delete('[:]')} = #{attribute.values.to_s.delete('[:]')}
+    SQL
     DB[:conn].execute(sql)
   end
 end
